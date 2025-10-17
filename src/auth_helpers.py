@@ -5,6 +5,8 @@ import auth_service
 from display_texts import dt
 from auth_service import reset_user_password
 import logging
+from dotenv import load_dotenv
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 

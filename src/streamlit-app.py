@@ -2,7 +2,9 @@ import os
 import streamlit as st
 from display_texts import dt
 from auth_helpers import login_ui
+from dotenv import load_dotenv
 
+load_dotenv()
 # st.markdown("<div style='position: absolute; top: 0px; left: 0px; font-weight: bold;'>xxxxx</div>", unsafe_allow_html=True)
 
 if dt.LOGO:

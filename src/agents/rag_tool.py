@@ -2,12 +2,14 @@ import json
 from typing import Dict, List, Optional, Any, Union, Tuple
 from enum import Enum
 import os
+from dotenv.main import load_dotenv
 import psycopg2 # Import psycopg2 for error handling
 from langchain_core.tools import BaseTool, tool
 
 from rag_system import RAGSystem
 from db_manager import schema_app_data # Import schema_app_data
 
+load_dotenv()
 # Initialize the RAG system
 rag_system = RAGSystem()
 

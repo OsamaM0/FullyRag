@@ -20,6 +20,9 @@ from frontend.pdf_viewer_with_annotations import display_pdf
 from db_manager import DatabaseManager
 from display_texts import dt
 from auth_helpers import ensure_authenticated
+from dotenv import load_dotenv
+
+load_dotenv()
 
 AI_ICON = dt.AI_ICON
 USER_ICON = dt.USER_ICON
@@ -125,7 +128,7 @@ async def main() -> None:
         load_dotenv()
         agent_url = os.getenv("AGENT_URL")
         if not agent_url:
-            host = os.getenv("HOST", "0.0.0.0"); port = os.getenv("PORT", 8080)
+            host = os.getenv("HOST", "localhost"); port = os.getenv("PORT", 8080)
             agent_url = f"http://{host}:{port}"
         try:
             with st.spinner(dt.AGENT_CONNECTING_SPINNER):

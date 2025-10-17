@@ -183,3 +183,6 @@ display_texts_custom.py
 src/migrations/*
 
 uploaded/*
+
+# Ignore all .history folder
+.history/

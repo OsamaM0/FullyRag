@@ -6,6 +6,9 @@ from uuid import UUID
 
 import httpx
 
+from dotenv import load_dotenv
+
+
 from schema import (
     ChatHistory,
     ChatHistoryInput,
@@ -19,6 +22,7 @@ from schema import (
 )
 from typing import cast
 
+load_dotenv()
 
 class AgentClientError(Exception):
     pass
@@ -56,7 +60,7 @@ class AgentClient:
 
     def __init__(
         self,
-        base_url: str = "http://0.0.0.0",
+        base_url: str = "http://localhost",
         agent: str | None = None,
         timeout: float | None = None,
         get_info: bool = True,

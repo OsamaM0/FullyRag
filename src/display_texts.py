@@ -1,5 +1,8 @@
 import os
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 display_texts_json_path = os.getenv("DISPLAY_TEXTS_JSON_PATH", "display_texts.json")
 

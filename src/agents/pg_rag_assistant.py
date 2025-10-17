@@ -21,6 +21,9 @@ from core import get_model, settings
 
 from memory.postgres import get_postgres_saver
 
+from dotenv import load_dotenv
+
+load_dotenv()
 class AgentState(MessagesState, total=False):
     """total=False is PEP589 specs.
 
@@ -44,7 +47,7 @@ current_date = datetime.now().strftime("%B %d, %Y")
 instructions = os.getenv("SYSTEM_PROMPT", False)
 if not instructions:
     system_prompt = os.getenv("SYSTEM_PROMPT_PATH")
-    with open(system_prompt, "r") as f:
+    with open(system_prompt, "r", encoding="utf-8") as f:
         instructions = f.read()
 
 instructions = instructions.replace('{', '{{').replace('}', '}}').replace('/././/', '{').replace('//././.', '}')

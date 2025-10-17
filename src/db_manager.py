@@ -12,11 +12,15 @@ from sqlalchemy import create_engine, text
 import pandas as pd
 from urllib.parse import urlparse
 import os
+from dotenv import load_dotenv
+
 try:
     from google.cloud.sql.connector import Connector, IPTypes
 except ImportError:
     Connector = None
     IPTypes = None
+
+load_dotenv()
 
 try:
     from .schema.schema import UserInDB, UserFeedbackCreate, UserFeedbackRead

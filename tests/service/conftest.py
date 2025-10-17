@@ -40,12 +40,12 @@ def mock_httpx():
 
         def mock_stream(method: str, url: str, **kwargs):
             # Strip the base URL since TestClient expects just the path
-            path = url.replace("http://0.0.0.0", "")
+            path = url.replace("http://localhost", "")
             return client.stream(method, path, **kwargs)
 
         def mock_get(url: str, **kwargs):
             # Strip the base URL since TestClient expects just the path
-            path = url.replace("http://0.0.0.0", "")
+            path = url.replace("http://localhost", "")
             return client.get(path, **kwargs)
 
         with patch("httpx.stream", mock_stream):
