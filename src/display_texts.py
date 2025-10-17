@@ -1,6 +1,7 @@
 import os
 import json
 from dotenv import load_dotenv
+from pathlib import Path
 
 load_dotenv()
 
@@ -21,14 +22,97 @@ class DotDict(dict):
                 self[k] = [DotDict(i) if isinstance(i, dict) else i for i in v]
 
 
-dt_data = {}
+class MultiLanguageTexts:
+    """Multi-language support for display texts"""
+    
+    AVAILABLE_LANGUAGES = {
+        'en': 'English',
+        'ar': 'العربية'
+    }
+    
+    def __init__(self, base_path: str, default_language: str = 'en'):
+        self.base_path = Path(base_path)
+        self.default_language = default_language
+        self.current_language = default_language
+        self.texts = {}
+        
+        # Load all available language files
+        self._load_languages()
+    
+    def _load_languages(self):
+        """Load all available language files"""
+        # Load default language (English)
+        try:
+            with open(self.base_path, 'r', encoding='utf-8') as f:
+                self.texts['en'] = json.load(f)
+        except FileNotFoundError:
+            raise Exception(f"FATAL: Display texts JSON file not found at '{self.base_path}'. The application cannot start without it.")
+        except json.JSONDecodeError as e:
+            raise Exception(f"FATAL: Error decoding display texts JSON file at '{self.base_path}': {e}. The application cannot start.")
+        
+        # Load other language files (e.g., display_texts.ar.json)
+        base_dir = self.base_path.parent
+        base_name = self.base_path.stem  # 'display_texts'
+        
+        for lang_code in self.AVAILABLE_LANGUAGES.keys():
+            if lang_code == 'en':
+                continue  # Already loaded
+            
+            lang_file = base_dir / f"{base_name}.{lang_code}.json"
+            if lang_file.exists():
+                try:
+                    with open(lang_file, 'r', encoding='utf-8') as f:
+                        self.texts[lang_code] = json.load(f)
+                except Exception as e:
+                    print(f"Warning: Could not load language file '{lang_file}': {e}")
+    
+    def set_language(self, language_code: str):
+        """Set the current language"""
+        if language_code in self.texts:
+            self.current_language = language_code
+        else:
+            print(f"Warning: Language '{language_code}' not available. Using default.")
+            self.current_language = self.default_language
+    
+    def get_texts(self) -> DotDict:
+        """Get texts for current language"""
+        return DotDict(self.texts.get(self.current_language, self.texts[self.default_language]))
+    
+    def get_available_languages(self) -> dict:
+        """Get list of available languages"""
+        return {k: v for k, v in self.AVAILABLE_LANGUAGES.items() if k in self.texts}
+
+
+# Initialize multi-language support
+_ml_texts = None
+dt = None
+
 try:
-    with open(display_texts_json_path, 'r', encoding='utf-8') as f:
-        dt_data = json.load(f)
-    dt = DotDict(dt_data)
-except FileNotFoundError:
-    raise Exception(f"FATAL: Display texts JSON file not found at '{display_texts_json_path}'. The application cannot start without it.")
-except json.JSONDecodeError as e:
-    raise Exception(f"FATAL: Error decoding display texts JSON file at '{display_texts_json_path}': {e}. The application cannot start.")
+    _ml_texts = MultiLanguageTexts(display_texts_json_path)
+    dt = _ml_texts.get_texts()
 except Exception as e:
-    raise Exception(f"FATAL: An unexpected error occurred while loading display texts from '{display_texts_json_path}': {e}. The application cannot start.")
+    raise Exception(f"FATAL: An unexpected error occurred while loading display texts: {e}. The application cannot start.")
+
+
+def get_language_manager():
+    """Get the language manager instance"""
+    return _ml_texts
+
+
+def set_language(language_code: str):
+    """Set the current language and return updated texts"""
+    global dt
+    if _ml_texts:
+        _ml_texts.set_language(language_code)
+        dt = _ml_texts.get_texts()
+    return dt
+
+
+def get_current_language() -> str:
+    """Get current language code"""
+    return _ml_texts.current_language if _ml_texts else 'en'
+
+
+def get_available_languages() -> dict:
+    """Get available languages"""
+    return _ml_texts.get_available_languages() if _ml_texts else {'en': 'English'}

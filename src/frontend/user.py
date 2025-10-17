@@ -9,7 +9,7 @@ if not ensure_authenticated():
 if "current_user_email" in st.session_state:
     st.markdown(f":material/account_circle: {dt.LOGGED_AS}: {st.session_state.current_user_email}")
 else:
-    st.warning(dt.USER_PROFILE_NO_EMAIL_WARNING)
+    st.warning(dt.get("USER_PROFILE_NO_EMAIL_WARNING", "Warning: Email information not available."))
 
 if st.button(dt.LOGOUT_BUTTON, key="logout_button_profile_page", type='primary'):
     logout()

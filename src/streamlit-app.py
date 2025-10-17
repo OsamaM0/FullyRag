@@ -1,11 +1,15 @@
 import os
 import streamlit as st
-from display_texts import dt
+from display_texts import dt, set_language, get_current_language, get_available_languages
 from auth_helpers import login_ui
 from dotenv import load_dotenv
 
 load_dotenv()
 # st.markdown("<div style='position: absolute; top: 0px; left: 0px; font-weight: bold;'>xxxxx</div>", unsafe_allow_html=True)
+
+# Initialize session state for language
+if "app_language" not in st.session_state:
+    st.session_state.app_language = get_current_language()
 
 if dt.LOGO:
     if dt.BIG_LOGO:

@@ -67,7 +67,7 @@ def pdf_dialog():
             print(f"Error in pdf_dialog calling display_pdf: {e}")
     else:
         if not pdf_name: st.error(dt.PDF_DIALOG_NO_PDF_ERROR)
-        if not current_agent_client: st.error("Agent client not available for PDF dialog.")
+        if not current_agent_client: st.error(dt.AGENT_CLIENT_NOT_AVAILABLE)
     if st.button(dt.PDF_DIALOG_CLOSE_BUTTON): st.rerun()
 
 
@@ -78,6 +78,10 @@ def show_user_modal():
     st.session_state["show_user_modal"] = True
 
 async def main() -> None:
+    # Apply language-specific CSS
+    from multilanguage_css import apply_language_styles
+    current_language = st.session_state.get('app_language', 'en')
+    apply_language_styles(st, current_language)
 
     custom_css = """
     <style>
@@ -165,6 +169,34 @@ async def main() -> None:
         st.session_state.thread_id = thread_id
 
     with st.sidebar:
+        # Language selector
+        from display_texts import set_language, get_current_language, get_available_languages
+        available_langs = get_available_languages()
+        current_lang = get_current_language()
+        
+        # Find the index of current language
+        lang_codes = list(available_langs.keys())
+        lang_names = list(available_langs.values())
+        current_lang_idx = lang_codes.index(current_lang) if current_lang in lang_codes else 0
+        
+        selected_lang_name = st.selectbox(
+            dt.LANGUAGE_SELECTOR_LABEL,
+            options=lang_names,
+            index=current_lang_idx,
+            key="language_selector"
+        )
+        
+        # Get the language code from the selected name
+        selected_lang_code = lang_codes[lang_names.index(selected_lang_name)]
+        
+        # Update language if changed
+        if selected_lang_code != st.session_state.get("app_language", current_lang):
+            st.session_state.app_language = selected_lang_code
+            from display_texts import dt as updated_dt
+            set_language(selected_lang_code)
+            st.rerun()
+        
+        st.divider()
 
         model_idx = agent_client.info.models.index(agent_client.info.default_model)
         model = 'gpt-4o'
@@ -289,7 +321,7 @@ async def main() -> None:
                                 hide_welcome()
                                 st.rerun()
             else:
-                st.warning("Example prompts are not configured or dt.EXAMPLE_PROMPTS is missing.")
+                st.warning(dt.EXAMPLE_PROMPTS_NOT_CONFIGURED)
             with st.container(border=False):
                 st.markdown(f"""
                 <div style="padding: 10px; border-radius: 10px; text-size: 0.6rem; background-color: #f8f9fa; border: 1px solid #dee2e6;">
@@ -311,7 +343,7 @@ async def main() -> None:
             files = user_input.files if hasattr(user_input, 'files') else [] # Ensure files attribute exists
         
         if user_text is None and not files: # Handle case where only suggested_command was true but it was empty
-             st.warning("Please enter a message or select a suggestion.") # Or handle as appropriate
+             st.warning(dt.ENTER_MESSAGE_WARNING) # Or handle as appropriate
         else:
             messages.append(ChatMessage(type="human", content=user_text or "", attached_files=[f.name for f in files]))
             additional_markdown = ""
@@ -474,7 +506,7 @@ async def process_tool_result(tool_result: ChatMessage, tool_names: Dict[str, st
     current_tool_name = tool_names.get(tool_result.tool_call_id)
     status = call_results.get(tool_result.tool_call_id)
     plot_data_for_this_tool = None
-    if not status: st.error(f"Could not find status container for tool_call_id: {tool_result.tool_call_id}"); return
+    if not status: st.error(dt.TOOL_CALL_ID_NOT_FOUND.format(tool_call_id=tool_result.tool_call_id)); return
     
     if tool_result.tool_call_id in Create_Graph_call_ids and agent_client:
         with status:
@@ -498,12 +530,12 @@ async def process_tool_result(tool_result: ChatMessage, tool_names: Dict[str, st
             try:
                 pdf_results_list = json.loads(tool_result.content)
                 if not isinstance(pdf_results_list, list):
-                    st.error("PDF_Viewer tool returned an unexpected format. Expected a list of PDF results.")
-                    status.update(state="complete", label="PDF Viewer Error")
+                    st.error(dt.PDF_VIEWER_UNEXPECTED_FORMAT)
+                    status.update(state="complete", label=dt.PDF_VIEWER_ERROR)
                     # Must return here as pdf_buttons_to_create would be undefined for the loop after 'with status'
                     return
 
-                status.update(state="running", label=f"Processing {len(pdf_results_list)} PDF(s)...")
+                status.update(state="running", label=dt.PDF_PROCESSING_STATUS.format(count=len(pdf_results_list)))
                 
                 all_processed_successfully = True
                 # pdf_buttons_to_create is already initialized outside
@@ -511,7 +543,7 @@ async def process_tool_result(tool_result: ChatMessage, tool_names: Dict[str, st
                 for pdf_entry_idx, pdf_entry in enumerate(pdf_results_list): # Added enumerate for unique key generation
                     if pdf_entry.get('error'):
                         original_pdf_file_name = pdf_entry.get('original_request', {}).get('pdf_file', f"request_{pdf_entry_idx}")
-                        st.error(f"Error for PDF '{original_pdf_file_name}': {pdf_entry['error']}")
+                        st.error(dt.PDF_ERROR_FOR_FILE.format(original_pdf_file_name=original_pdf_file_name, error=pdf_entry['error']))
                         all_processed_successfully = False
                         continue # Skip to next PDF entry
 
@@ -520,7 +552,7 @@ async def process_tool_result(tool_result: ChatMessage, tool_names: Dict[str, st
                     debug_viewer = pdf_entry.get('debug', False) 
 
                     if not pdf_name:
-                        st.error(f"PDF entry at index {pdf_entry_idx} is missing 'pdf_file'.")
+                        st.error(dt.PDF_ENTRY_MISSING_FILE.format(pdf_entry_idx=pdf_entry_idx))
                         all_processed_successfully = False
                         continue
 
@@ -541,23 +573,23 @@ async def process_tool_result(tool_result: ChatMessage, tool_names: Dict[str, st
                                 "unique_suffix": f"{pdf_entry_idx}_{pdf_name.replace(' ','_')}"
                             })
                         except Exception as e:
-                            st.error(f"Error fetching annotations for '{pdf_name}': {e}")
+                            st.error(dt.PDF_FETCH_ANNOTATIONS_ERROR.format(pdf_name=pdf_name, e=e))
                             all_processed_successfully = False
                 
                 if all_processed_successfully and pdf_buttons_to_create:
-                    status.update(state="complete", label=f"{len(pdf_buttons_to_create)} PDF(s) ready for viewing.")
+                    status.update(state="complete", label=dt.PDF_ALL_PROCESSED.format(count=len(pdf_buttons_to_create)))
                 elif not pdf_buttons_to_create:
-                     status.update(state="complete", label="No PDFs to display or all had errors.")
+                     status.update(state="complete", label=dt.PDF_NO_DISPLAY)
                 else:
-                    status.update(state="complete", label="Some PDFs processed with errors.")
+                    status.update(state="complete", label=dt.PDF_SOME_ERRORS)
 
             except json.JSONDecodeError:
-                st.error(f"PDF_Viewer tool returned invalid JSON: {tool_result.content}")
-                status.update(state="complete", label="PDF Viewer JSON Error")
+                st.error(dt.PDF_VIEWER_INVALID_JSON.format(content=tool_result.content))
+                status.update(state="complete", label=dt.PDF_VIEWER_JSON_ERROR)
             except Exception as e:
-                st.error(f"Error processing PDF_Viewer results: {e}")
+                st.error(dt.PDF_VIEWER_PROCESSING_ERROR + f": {e}")
                 st.write(f"Raw output: {tool_result.content}")
-                status.update(state="complete", label="PDF Viewer Processing Error")
+                status.update(state="complete", label=dt.PDF_VIEWER_PROCESSING_ERROR)
         
         with st.container(key=f"sources_{tool_result.tool_call_id}", border=True):
             st.button(dt.SOURCE_PDFs, type='tertiary', icon=":material/info:", help=dt.HELP_SOURCE_PDFs, key=f"pdf_{str(uuid.uuid4())}")
@@ -576,8 +608,8 @@ async def process_tool_result(tool_result: ChatMessage, tool_names: Dict[str, st
                     else: data_lines.append(line)
                 if data_lines:
                     try: df = pd.read_csv(StringIO("\n".join(data_lines)), sep=';'); st.dataframe(df)
-                    except Exception as e: st.error(f"Error parsing CSV: {e}"); st.code(csv_string, language="csv")
-                else: st.info("No data from SQL query.")
+                    except Exception as e: st.error(dt.SQL_PARSING_ERROR.format(e=e)); st.code(csv_string, language="csv")
+                else: st.info(dt.SQL_NO_DATA)
                 for comment in comment_lines: 
                     if "warning" in comment.lower(): st.warning(comment)
                     elif "error" in comment.lower(): st.error(comment)
