@@ -1,0 +1,68 @@
+services:
+  agent-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.service
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - postgres-db
+    develop:
+      watch:
+        - path: src/agents/
+          action: sync+restart
+          target: /app/agents/
+        - path: src/schema/
+          action: sync+restart
+          target: /app/schema/
+        - path: src/service/
+          action: sync+restart
+          target: /app/service/
+        - path: src/core/
+          action: sync+restart
+          target: /app/core/
+        - path: src/memory/
+          action: sync+restart
+          target: /app/memory/
+
+  streamlit-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    depends_on:
+      - agent-service
+    environment:
+      - AGENT_URL=http://agent-service:8080
+    develop:
+      watch:
+        - path: src/client/
+          action: sync+restart
+          target: /app/client/
+        - path: src/schema/
+          action: sync+restart
+          target: /app/schema/
+        - path: src/streamlit-app.py
+          action: sync+restart
+          target: /app/streamlit-app.py
+
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres_init:/docker-entrypoint-initdb.d
+      - ${SQL_DUMP_PATH}:/docker-entrypoint-initdb.d/backup.sql
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
