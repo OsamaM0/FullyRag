@@ -1,6 +1,5 @@
 import pytest
 from langchain_core.messages import AIMessage
-
 from service.service import _create_ai_message
 
 

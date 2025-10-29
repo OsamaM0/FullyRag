@@ -1,7 +1,6 @@
 import pytest
-from streamlit.testing.v1 import AppTest
-
 from client import AgentClient
+from streamlit.testing.v1 import AppTest
 
 
 @pytest.mark.docker

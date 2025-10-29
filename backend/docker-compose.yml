@@ -1,0 +1,57 @@
+services:
+  agent-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - ../.env
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
+      # Explicitly set DATABASE_URL for container connectivity to postgres-db
+      - DATABASE_URL=postgresql://postgres:12345@postgres-db:5432/demo_fully_rag
+    develop:
+      watch:
+        - path: src/agents/
+          action: sync+restart
+          target: /app/src/agents/
+        - path: src/schema/
+          action: sync+restart
+          target: /app/src/schema/
+        - path: src/service/
+          action: sync+restart
+          target: /app/src/service/
+        - path: src/core/
+          action: sync+restart
+          target: /app/src/core/
+        - path: src/memory/
+          action: sync+restart
+          target: /app/src/memory/
+
+  postgres-db:
+    image: postgres:15
+    container_name: polyrag-postgres
+    env_file:
+      - ../.env
+    environment:
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASS:-postgres}
+      - POSTGRES_DB=${DB_NAME:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  postgres_data:

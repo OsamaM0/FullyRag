@@ -3,9 +3,8 @@ import os
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
-from httpx import Request, Response
-
 from client import AgentClient, AgentClientError
+from httpx import Request, Response
 from schema import AgentInfo, ChatHistory, ChatMessage, ServiceMetadata
 from schema.models import OpenAIModelName
 
@@ -257,7 +256,9 @@ async def test_acreate_feedback(agent_client):
 
     # Test error response
     error_response = Response(
-        500, text="Internal Server Error", request=Request("POST", "http://test/feedback")
+        500,
+        text="Internal Server Error",
+        request=Request("POST", "http://test/feedback"),
     )
     with patch("httpx.AsyncClient.post", return_value=error_response):
         with pytest.raises(AgentClientError) as exc:
@@ -286,7 +287,9 @@ def test_get_history(agent_client):
 
     # Test error response
     error_response = Response(
-        500, text="Internal Server Error", request=Request("POST", "http://test/history")
+        500,
+        text="Internal Server Error",
+        request=Request("POST", "http://test/history"),
     )
     with patch("httpx.post", return_value=error_response):
         with pytest.raises(AgentClientError) as exc:

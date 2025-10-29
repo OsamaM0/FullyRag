@@ -1,12 +1,12 @@
 import json
 from unittest.mock import AsyncMock, patch
 
+import langsmith
 import pytest
+from agents.agents import Agent
 from langchain_core.messages import AIMessage, AIMessageChunk, HumanMessage
 from langgraph.pregel.types import StateSnapshot
 from langgraph.types import Interrupt
-
-from agents.agents import Agent
 from schema import ChatHistory, ChatMessage, ServiceMetadata
 from schema.models import OpenAIModelName
 
@@ -340,7 +340,10 @@ def test_info(test_client, mock_settings) -> None:
     base_agent = Agent(description="A base agent.", graph=None)
     mock_settings.AUTH_SECRET = None
     mock_settings.DEFAULT_MODEL = OpenAIModelName.GPT_4O_MINI
-    mock_settings.AVAILABLE_MODELS = {OpenAIModelName.GPT_4O_MINI, OpenAIModelName.GPT_4O}
+    mock_settings.AVAILABLE_MODELS = {
+        OpenAIModelName.GPT_4O_MINI,
+        OpenAIModelName.GPT_4O,
+    }
     with patch.dict("agents.agents.agents", {"base-agent": base_agent}, clear=True):
         response = test_client.get("/info")
         assert response.status_code == 200

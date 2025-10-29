@@ -1,0 +1,32 @@
+import streamlit as st
+
+from auth_helpers import ensure_authenticated
+from display_texts import dt, get_current_language
+from multilanguage_css import apply_language_styles
+from session_manager import init_session_state
+
+# Initialize session state
+init_session_state()
+
+# Apply language-specific CSS
+current_language = st.session_state.get("app_language", get_current_language())
+apply_language_styles(st, current_language)
+
+if not ensure_authenticated():
+    st.stop()
+
+st.title(dt.FEEDBACK)
+
+feedback_text = st.text_area(dt.FEEDBACK_DIALOG, key="feedback_text_area")
+if st.button(label="", icon=":material/send:", key="submit_feedback_button", type="primary"):
+    if feedback_text:
+
+        try:
+            st.session_state.agent_client.submit_user_feedback(
+                user_id=st.session_state.current_user_id,
+                feedback_content=feedback_text,
+            )
+
+            st.toast(dt.FEEDBACK_SUBMITTED_TOAST, icon=dt.FEEDBACK_STARS_ICON)
+        except Exception as e:
+            st.error(f"An error occurred while submitting your feedback: {e}")

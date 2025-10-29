@@ -7,25 +7,31 @@ services:
       - "8080:8080"
     env_file:
       - .env
+    environment:
+      # Override DATABASE_URL so the app connects to the postgres service
+      - HOST=0.0.0.0
+      - PORT=8080
+      - DATABASE_URL=postgresql://postgres:12345@postgres-db:5432/demo_fully_rag
     depends_on:
-      - postgres-db
+      postgres-db:
+        condition: service_healthy
     develop:
       watch:
-        - path: src/agents/
+        - path: backend/src/agents/
           action: sync+restart
-          target: /app/agents/
-        - path: src/schema/
+          target: /app/src/agents/
+        - path: backend/src/schema/
           action: sync+restart
-          target: /app/schema/
-        - path: src/service/
+          target: /app/src/schema/
+        - path: backend/src/service/
           action: sync+restart
-          target: /app/service/
-        - path: src/core/
+          target: /app/src/service/
+        - path: backend/src/core/
           action: sync+restart
-          target: /app/core/
-        - path: src/memory/
+          target: /app/src/core/
+        - path: backend/src/memory/
           action: sync+restart
-          target: /app/memory/
+          target: /app/src/memory/
 
   streamlit-app:
     build:
@@ -41,28 +47,39 @@ services:
       - AGENT_URL=http://agent-service:8080
     develop:
       watch:
-        - path: src/client/
+        - path: frontend/src/client/
           action: sync+restart
-          target: /app/client/
-        - path: src/schema/
+          target: /app/src/client/
+        - path: frontend/src/schema/
           action: sync+restart
-          target: /app/schema/
-        - path: src/streamlit-app.py
+          target: /app/src/schema/
+        - path: frontend/src/streamlit-app.py
           action: sync+restart
-          target: /app/streamlit-app.py
+          target: /app/src/streamlit-app.py
+        - path: frontend/src/frontend/
+          action: sync+restart
+          target: /app/src/frontend/
 
   postgres-db:
     image: postgres:15
     container_name: postgres-db
     env_file:
       - .env
+    environment:
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASS:-postgres}
+      - POSTGRES_DB=${DB_NAME:-postgres}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/postgres_init:/docker-entrypoint-initdb.d
-      - ${SQL_DUMP_PATH}:/docker-entrypoint-initdb.d/backup.sql
     ports:
       - "5433:5432"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
 volumes:
   postgres_data:

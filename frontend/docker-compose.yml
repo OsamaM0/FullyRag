@@ -1,0 +1,25 @@
+services:
+  streamlit-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    env_file:
+      - ../.env
+    environment:
+      - AGENT_URL=http://localhost:8080
+    develop:
+      watch:
+        - path: src/client/
+          action: sync+restart
+          target: /app/src/client/
+        - path: src/schema/
+          action: sync+restart
+          target: /app/src/schema/
+        - path: src/streamlit-app.py
+          action: sync+restart
+          target: /app/src/streamlit-app.py
+        - path: src/frontend/
+          action: sync+restart
+          target: /app/src/frontend/

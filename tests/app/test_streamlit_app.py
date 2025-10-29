@@ -2,11 +2,10 @@ from collections.abc import AsyncGenerator
 from unittest.mock import AsyncMock, Mock
 
 import pytest
-from streamlit.testing.v1 import AppTest
-
 from client import AgentClientError
 from schema import ChatHistory, ChatMessage
 from schema.models import OpenAIModelName
+from streamlit.testing.v1 import AppTest
 
 
 def test_app_simple_non_streaming(mock_agent_client):
@@ -109,7 +108,13 @@ async def test_app_streaming(mock_agent_client):
     ai_with_tool = ChatMessage(
         type="ai",
         content="",
-        tool_calls=[{"name": "calculator", "id": "test_call_id", "args": {"expression": "6 * 7"}}],
+        tool_calls=[
+            {
+                "name": "calculator",
+                "id": "test_call_id",
+                "args": {"expression": "6 * 7"},
+            }
+        ],
     )
     tool_message = ChatMessage(type="tool", content="42", tool_call_id="test_call_id")
     final_ai_message = ChatMessage(type="ai", content="The answer is 42")

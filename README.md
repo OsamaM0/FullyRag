@@ -4,6 +4,8 @@
 
 **PolyRAG is a modular agentic RAG framework optimized for SLM (small language models) with small context windows**
 
+➡️ Full project documentation is now centralized in `docs/`. Start here: docs/index.md
+
 <img src="media/schema-data.png" alt="PolyRAG Architecture" width="800"/>
 
 *Agents and tools are designed to pipe outputs directly, auto-correct imperfect inputs, and minimize main agent context load. Every feature is built for small, slow, or local LLMs.*
@@ -55,12 +57,12 @@
 
 ## Document Extraction & Indexing
 
-- **Semi-structured Extraction:**  
+- **Semi-structured Extraction:**
   - Uses NLM Ingestor and Tika with data type detection and tree structure.
   - Localization and regex rules for extracting structured parts.
   - Produces a structure with type, parent, child, and position.
 
-- **Indexing:**  
+- **Indexing:**
   - Uses PostgreSQL TSVector (French) for efficient, scalable full-text search with tokenization and stemming.
   - No embeddings by default: lighter, scalable, and future-ready for on-premise models.
   - Excellent performance for technical queries.
@@ -98,6 +100,25 @@ streamlit run src/streamlit-app.py
 
 ---
 
+### Run with Docker
+
+```bash
+# From the repo root
+docker compose -f compose.yaml up --build
+```
+
+Services:
+- Backend API at http://localhost:8080
+- Streamlit app at http://localhost:8501
+- PostgreSQL at localhost:5433 (container port 5432)
+
+To stop:
+```bash
+docker compose -f compose.yaml down
+```
+
+---
+
 ## 🗄️ Database Setup
 
 To quickly get started with real data as shown in the screenshots, you can populate your PostgreSQL database using the following dump:
@@ -123,7 +144,7 @@ All configuration is handled via environment variables in your `.env` file. See 
 - `AWS_KB_ID`: Amazon Bedrock Knowledge Base ID.
 - `DATABASE_URL`: PostgreSQL connection string.
 - `SCHEMA_APP_DATA`: Database schema for application data (default: `document_data`).
-- `LANGUAGE`: Language for text search queries (default: `english`).
+- `LANGUAGE`: **Default UI language** (options: `english`, `arabic`, `en`, `ar`). See [Language Configuration Guide](docs/language.md) for details.
 - `NLM_INGESTOR_API`: URL for the NLM Ingestor service.
 - `UPLOADED_PDF_PARSER`: Parser for uploaded PDFs (`pypdf`, `nlm-ingestor`, etc.).
 - `DISPLAY_TEXTS_JSON_PATH`: Path to display texts JSON.
@@ -131,6 +152,31 @@ All configuration is handled via environment variables in your `.env` file. See 
 - `NO_AUTH`: Set to `True` to disable authentication (not recommended for production).
 
 Copy `.env.example` to `.env` and fill in the required values for your setup.
+
+### 🌍 Language Configuration
+
+PolyRAG supports multiple languages with full RTL support. To configure the default language:
+
+**Quick Setup:**
+```bash
+# Linux/Mac
+./scripts/configure_language.sh
+
+# Windows PowerShell
+.\scripts\configure_language.ps1
+```
+
+**Manual Setup:**
+Edit `.env` file:
+```env
+LANGUAGE=english  # Options: english, arabic, en, ar
+```
+
+**Supported Languages:**
+- English (default)
+- Arabic (with RTL support)
+
+📖 **Full Documentation:** See [Language Configuration Guide](docs/language.md) for complete details.
 
 ---
 
@@ -140,24 +186,24 @@ PolyRAG is designed to be easily adapted to your own use case—across any domai
 
 **To use PolyRAG with your own data:**
 
-1. **Database Connection:**  
+1. **Database Connection:**
    - Edit the `DATABASE_URL` in your `.env` file to point to your own PostgreSQL (or compatible) database.
    - Adjust schema/table names as needed in your configuration.
 
-2. **System Prompt:**  
+2. **System Prompt:**
    - Adapt the system prompt file (see the `SYSTEM_PROMPT_PATH` variable in your `.env`) to fit your domain, lexicon, and user instructions.
 
-3. **Indexing Your Data:**  
+3. **Indexing Your Data:**
    - Use the scripts in the [`scripts/`](scripts/) directory to index your own documents:
      - `index-folder-script.py`: Index documents from a local folder.
      - `index-urls-script.py`: Index documents from a list of URLs.
      - `scrape_arxiv.py`, `scrape_medrxiv.py`: Example scrapers for scientific sources.
    - You can create your own scripts following these templates for other data sources.
 
-4. **LLM Backend:**  
+4. **LLM Backend:**
    - PolyRAG is backend-agnostic. Set the appropriate API key(s) in your `.env` to use OpenAI, Mistral, DeepSeek, Anthropic, Google, Groq, or your own local LLM.
 
-5. **Display Texts & Instructions:**  
+5. **Display Texts & Instructions:**
    - Customize user-facing texts and instructions by editing the files referenced in your `.env` (e.g., `DISPLAY_TEXTS_JSON_PATH`, `instructions.md`).
 
 **For more advanced customization, see the code in the `src/` directory and adapt agents, tools, or workflows as needed.**

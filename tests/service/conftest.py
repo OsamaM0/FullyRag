@@ -3,7 +3,6 @@ from unittest.mock import AsyncMock, Mock, patch
 import pytest
 from fastapi.testclient import TestClient
 from langchain_core.messages import AIMessage
-
 from service import app
 
 

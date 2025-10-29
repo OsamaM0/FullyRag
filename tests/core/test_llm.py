@@ -2,13 +2,12 @@ import os
 from unittest.mock import patch
 
 import pytest
+from core.llm import get_model
 from langchain_anthropic import ChatAnthropic
 from langchain_community.chat_models import FakeListChatModel
 from langchain_groq import ChatGroq
 from langchain_ollama import ChatOllama
 from langchain_openai import ChatOpenAI
-
-from core.llm import get_model
 from schema.models import (
     AnthropicModelName,
     FakeModelName,

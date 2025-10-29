@@ -7,12 +7,25 @@ RUN apt-get update && apt-get install -y libpq5 --no-install-recommends && rm -r
 ENV UV_PROJECT_ENVIRONMENT="/usr/local/"
 ENV UV_COMPILE_BYTECODE=1
 
-COPY pyproject.toml .
-COPY uv.lock .
-RUN pip install --no-cache-dir uv
-RUN uv sync --frozen --no-install-project --no-dev
-COPY src/ .
-COPY media ./media
-COPY .variables ./.variables
+# Use the backend project definition
+COPY backend/pyproject.toml ./pyproject.toml
 
-CMD ["python", "run_service.py"]
+# Copy backend application code under /app/src
+COPY backend/src/ ./src
+
+# Install backend dependencies
+RUN pip install --no-cache-dir uv \
+	&& uv pip install --system .
+
+# Ensure Python prefers live source during development/hot-reload
+ENV PYTHONPATH=/app/src:${PYTHONPATH}
+
+# Shared variables and optional media
+# Prefer backend-specific variables if present
+COPY backend/.variables ./.variables
+COPY media ./media
+
+# Expose API port
+EXPOSE 8080
+
+CMD ["python", "src/run_service.py"]

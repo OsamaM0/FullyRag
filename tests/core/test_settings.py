@@ -3,9 +3,8 @@ import os
 from unittest.mock import patch
 
 import pytest
-from pydantic import SecretStr, ValidationError
-
 from core.settings import Settings, check_str_is_http
+from pydantic import SecretStr, ValidationError
 from schema.models import AnthropicModelName, AzureOpenAIModelName, OpenAIModelName
 
 
