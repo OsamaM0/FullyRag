@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# PolyRAG Setup Script
+# FullyRAG Setup Script
 # This script helps set up both backend and frontend projects
 
 set -e
 
-echo "🚀 PolyRAG Separated Architecture Setup"
+echo "🚀 FullyRAG Separated Architecture Setup"
 echo "======================================"
 echo ""
 

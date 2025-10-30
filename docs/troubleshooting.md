@@ -46,7 +46,7 @@ Backend `.env`
 HOST=0.0.0.0
 PORT=8080
 AUTH_SECRET=your-secret-key
-DATABASE_URL=postgresql://user:password@localhost:5432/polyrag
+DATABASE_URL=postgresql://user:password@localhost:5432/fullyrag
 OPENAI_API_KEY=...
 ```
 

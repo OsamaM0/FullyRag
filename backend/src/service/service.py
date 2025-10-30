@@ -98,8 +98,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(
-    title="PolyRAG Backend API",
-    description="Secure API for PolyRAG AI Agent System",
+    title="FullyRAG Backend API",
+    description="Secure API for FullyRAG AI Agent System",
     version="1.0.0",
     lifespan=lifespan,
 )

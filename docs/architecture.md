@@ -1,6 +1,6 @@
 # Architecture
 
-This page consolidates the visual architecture, data flow, file layout, API endpoints, and deployment options for PolyRAG.
+This page consolidates the visual architecture, data flow, file layout, API endpoints, and deployment options for FullyRAG.
 
 ## Visual overview
 

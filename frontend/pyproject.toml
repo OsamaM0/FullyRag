@@ -1,7 +1,7 @@
 [project]
-name = "PolyRag-Frontend"
+name = "FullyRag-Frontend"
 version = "0.1.0"
-description = "Frontend application for PolyRAG - Streamlit-based chat interface"
+description = "Frontend application for FullyRAG - Streamlit-based chat interface"
 readme = "README.md"
 authors = [{ name = "Joshua Carroll", email = "carroll.joshk@gmail.com" }]
 classifiers = [

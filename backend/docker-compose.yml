@@ -35,7 +35,7 @@ services:
 
   postgres-db:
     image: postgres:15
-    container_name: polyrag-postgres
+    container_name: fullyrag-postgres
     env_file:
       - ../.env
     environment:

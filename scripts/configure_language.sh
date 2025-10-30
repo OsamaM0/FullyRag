@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# PolyRAG Language Configuration Script
-# This script helps configure the default language for the PolyRAG application
+# FullyRAG Language Configuration Script
+# This script helps configure the default language for the FullyRAG application
 
 set -e
 
@@ -45,7 +45,7 @@ fi
 
 echo ""
 echo "======================================"
-echo "  PolyRAG Language Configuration"
+echo "  FullyRAG Language Configuration"
 echo "======================================"
 echo ""
 
@@ -107,7 +107,7 @@ echo ""
 print_success "Language configuration complete!"
 echo ""
 print_info "Next steps:"
-echo "  1. Restart your PolyRAG application"
+echo "  1. Restart your FullyRAG application"
 echo "  2. The UI will now display in ${DISPLAY_NAME}"
 echo "  3. Users can still change language using the sidebar selector"
 echo ""

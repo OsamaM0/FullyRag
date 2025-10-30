@@ -1,5 +1,5 @@
 """
-Multi-language CSS enhancements for PolyRAG
+Multi-language CSS enhancements for FullyRAG
 Adds proper RTL (Right-to-Left) support for Arabic and other RTL languages
 """
 

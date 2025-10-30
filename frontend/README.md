@@ -1,8 +1,8 @@
-# PolyRAG Frontend Application
+# FullyRAG Frontend Application
 
-**Streamlit-based chat interface for PolyRAG - Interactive AI research assistant**
+**Streamlit-based chat interface for FullyRAG - Interactive AI research assistant**
 
-This is the frontend application for PolyRAG, providing a beautiful and intuitive chat interface for interacting with the AI research assistant. Built with Streamlit, it offers real-time streaming responses, PDF viewing with annotations, conversation management, and more.
+This is the frontend application for FullyRAG, providing a beautiful and intuitive chat interface for interacting with the AI research assistant. Built with Streamlit, it offers real-time streaming responses, PDF viewing with annotations, conversation management, and more.
 
 ## 🚀 Features
 
@@ -18,7 +18,7 @@ This is the frontend application for PolyRAG, providing a beautiful and intuitiv
 ## 📋 Prerequisites
 
 - Python 3.12 or higher
-- Running PolyRAG Backend Service (see backend README)
+- Running FullyRAG Backend Service (see backend README)
 - (Optional) Docker and Docker Compose
 
 ## 🔧 Installation
@@ -95,12 +95,12 @@ Customize all UI text, labels, and messages by editing the display texts JSON fi
 
 ```json
 {
-  "LOGO": "media/polyrag.svg",
+  "LOGO": "media/fullyrag.png",
   "BIG_LOGO": true,
   "LOGOUT": "Logout",
   "FEEDBACK": "Feedback",
   "messages": {
-    "welcome": "Welcome to PolyRAG!",
+    "welcome": "Welcome to FullyRAG!",
     "chat_placeholder": "Ask me anything..."
   }
 }
@@ -274,6 +274,6 @@ For issues and questions, please open a GitHub issue or contact the maintainers.
 
 ## 🔗 Related
 
-- [PolyRAG Backend](../backend/README.md) - API service documentation
+- [FullyRAG Backend](../backend/README.md) - API service documentation
 - [Streamlit Documentation](https://docs.streamlit.io/)
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)

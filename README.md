@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="media/polyrag.svg" alt="PolyRAG Logo" width="200"/>
+  <img src="media/fullyrag.png" alt="FullyRAG Logo" width="200"/>
 </p>
 
-**PolyRAG is a modular agentic RAG framework optimized for SLM (small language models) with small context windows**
+**FullyRAG is a modular agentic RAG framework optimized for SLM (small language models) with small context windows**
 
 ➡️ Full project documentation is now centralized in `docs/`. Start here: docs/index.md
 
-<img src="media/schema-data.png" alt="PolyRAG Architecture" width="800"/>
+<img src="media/schema-data.png" alt="FullyRAG Architecture" width="800"/>
 
 *Agents and tools are designed to pipe outputs directly, auto-correct imperfect inputs, and minimize main agent context load. Every feature is built for small, slow, or local LLMs.*
 
@@ -14,44 +14,44 @@
 
 > **Modular: Bring Your Own Data, Lexicon, and LLM**
 >
-> This repo uses MedRxiv publications as a demo, but you can connect PolyRAG to any database, lexicon, or document set—just adapt the system prompt and DB connection. Any LLM backend is supported. Indexing scripts are in [`scripts/`](scripts/). See "Customization" below.
+> This repo uses MedRxiv publications as a demo, but you can connect FullyRAG to any database, lexicon, or document set—just adapt the system prompt and DB connection. Any LLM backend is supported. Indexing scripts are in [`scripts/`](scripts/). See "Customization" below.
 
 ---
 
 ## Agentic Architecture
 
 
-<img src="media/demo_3.png" alt="PolyRAG Smart Actions" width="800"/>
+<img src="media/demo_3.png" alt="FullyRAG Smart Actions" width="800"/>
 
 *Suggestion of actions at the creation of a new conversation*
 
 ---
 
 ### Conversational Research Assistant
-<img src="media/demo_1.png" alt="PolyRAG Chat Interface" width="800"/>
+<img src="media/demo_1.png" alt="FullyRAG Chat Interface" width="800"/>
 
 *Ask complex research questions and get precise, sourced answers. Accesses lexicon, finds paragraphs in documents*
 
 ---
 
 ### Contextual PDF Highlighting
-<img src="media/demo_4.png" alt="PolyRAG PDF Highlighting" width="800"/>
+<img src="media/demo_4.png" alt="FullyRAG PDF Highlighting" width="800"/>
 
 *View PDFs with automatically highlighted, contextually relevant blocks—extracted.*
 
 ---
 
 ### Data Visualization from Natural Language (Agent-Tool Chaining)
-<img src="media/demo_2.png" alt="PolyRAG Data Visualization" width="800"/>
+<img src="media/demo_2.png" alt="FullyRAG Data Visualization" width="800"/>
 
 *Generate publication trend graphs and other visualizations from natural language requests, with results piped through the agent-tool chain.*
 
 ---
 
 ### End-to-End Agent Orchestration
-<img src="media/example.png" alt="PolyRAG Agent Orchestration" width="800"/>
+<img src="media/example.png" alt="FullyRAG Agent Orchestration" width="800"/>
 
-*See how PolyRAG chains SQL, RAG, and PDF tools to answer technical questions—each step*
+*See how FullyRAG chains SQL, RAG, and PDF tools to answer technical questions—each step*
 
 ---
 
@@ -155,7 +155,7 @@ Copy `.env.example` to `.env` and fill in the required values for your setup.
 
 ### 🌍 Language Configuration
 
-PolyRAG supports multiple languages with full RTL support. To configure the default language:
+FullyRAG supports multiple languages with full RTL support. To configure the default language:
 
 **Quick Setup:**
 ```bash
@@ -182,9 +182,9 @@ LANGUAGE=english  # Options: english, arabic, en, ar
 
 ## 🛠️ Customization: Connect Your Own Data, Lexicon, and LLM
 
-PolyRAG is designed to be easily adapted to your own use case—across any domain, database, or document set. The MedRxiv setup provided here is just a showcase.
+FullyRAG is designed to be easily adapted to your own use case—across any domain, database, or document set. The MedRxiv setup provided here is just a showcase.
 
-**To use PolyRAG with your own data:**
+**To use FullyRAG with your own data:**
 
 1. **Database Connection:**
    - Edit the `DATABASE_URL` in your `.env` file to point to your own PostgreSQL (or compatible) database.
@@ -201,7 +201,7 @@ PolyRAG is designed to be easily adapted to your own use case—across any domai
    - You can create your own scripts following these templates for other data sources.
 
 4. **LLM Backend:**
-   - PolyRAG is backend-agnostic. Set the appropriate API key(s) in your `.env` to use OpenAI, Mistral, DeepSeek, Anthropic, Google, Groq, or your own local LLM.
+   - FullyRAG is backend-agnostic. Set the appropriate API key(s) in your `.env` to use OpenAI, Mistral, DeepSeek, Anthropic, Google, Groq, or your own local LLM.
 
 5. **Display Texts & Instructions:**
    - Customize user-facing texts and instructions by editing the files referenced in your `.env` (e.g., `DISPLAY_TEXTS_JSON_PATH`, `instructions.md`).

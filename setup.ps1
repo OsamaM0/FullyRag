@@ -1,7 +1,7 @@
-# PolyRAG Setup Script for Windows
+# FullyRAG Setup Script for Windows
 # This script helps set up both backend and frontend projects
 
-Write-Host "🚀 PolyRAG Separated Architecture Setup" -ForegroundColor Cyan
+Write-Host "🚀 FullyRAG Separated Architecture Setup" -ForegroundColor Cyan
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host ""
 

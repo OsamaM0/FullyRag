@@ -34,7 +34,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: index.docker.io/${{ secrets.DOCKER_USERNAME }}/PolyRag.service:${{ github.sha }}
+          tags: index.docker.io/${{ secrets.DOCKER_USERNAME }}/FullyRag.service:${{ github.sha }}
           file: docker/Dockerfile.service
 
   deploy:
@@ -49,4 +49,4 @@ jobs:
           app-name: 'agent-service'
           slot-name: 'production'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: 'index.docker.io/${{ secrets.DOCKER_USERNAME }}/PolyRag.service:${{ github.sha }}'
+          images: 'index.docker.io/${{ secrets.DOCKER_USERNAME }}/FullyRag.service:${{ github.sha }}'

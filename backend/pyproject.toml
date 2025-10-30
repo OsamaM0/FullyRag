@@ -1,7 +1,7 @@
 [project]
-name = "PolyRag-Backend"
+name = "FullyRag-Backend"
 version = "0.1.0"
-description = "Backend service for PolyRAG - AI agent service built with LangGraph and FastAPI"
+description = "Backend service for FullyRAG - AI agent service built with LangGraph and FastAPI"
 readme = "README.md"
 authors = [{ name = "Joshua Carroll", email = "carroll.joshk@gmail.com" }]
 classifiers = [

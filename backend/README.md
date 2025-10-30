@@ -1,8 +1,8 @@
-# PolyRAG Backend Service
+# FullyRAG Backend Service
 
-**Backend service for PolyRAG - AI agent service built with LangGraph and FastAPI**
+**Backend service for FullyRAG - AI agent service built with LangGraph and FastAPI**
 
-This is the backend/API service that powers the PolyRAG agentic RAG system. It provides REST API endpoints for AI agent interactions, document processing, RAG operations, and conversation management.
+This is the backend/API service that powers the FullyRAG agentic RAG system. It provides REST API endpoints for AI agent interactions, document processing, RAG operations, and conversation management.
 
 ## 🚀 Features
 
@@ -44,7 +44,7 @@ This is the backend/API service that powers the PolyRAG agentic RAG system. It p
    ```
 
 4. **Set up PostgreSQL database**
-   - Create a database named `polyrag`
+   - Create a database named `fullyrag`
    - Update `DATABASE_URL` in `.env` with your connection string
 
 5. **Run the service**
@@ -146,7 +146,7 @@ backend/
 
 ## 🔌 Client Integration
 
-This backend is designed to work with the PolyRAG frontend application. You can also integrate it with custom clients using the HTTP REST API.
+This backend is designed to work with the FullyRAG frontend application. You can also integrate it with custom clients using the HTTP REST API.
 
 Example using `httpx`:
 

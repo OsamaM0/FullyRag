@@ -16,11 +16,11 @@ except Exception:  # pragma: no cover - optional dependency safeguards
 
 
 COOKIE_KEYS = {
-    "access_token": "polyrag_access_token",
-    "refresh_token": "polyrag_refresh_token",
-    "current_user_id": "polyrag_user_id",
-    "current_user_email": "polyrag_user_email",
-    "authenticated": "polyrag_authenticated",
+    "access_token": "fullyrag_access_token",
+    "refresh_token": "fullyrag_refresh_token",
+    "current_user_id": "fullyrag_user_id",
+    "current_user_email": "fullyrag_user_email",
+    "authenticated": "fullyrag_authenticated",
 }
 
 

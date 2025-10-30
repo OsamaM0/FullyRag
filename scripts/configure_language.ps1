@@ -1,5 +1,5 @@
-# PolyRAG Language Configuration Script (PowerShell)
-# This script helps configure the default language for the PolyRAG application
+# FullyRAG Language Configuration Script (PowerShell)
+# This script helps configure the default language for the FullyRAG application
 
 # Function to print colored messages
 function Print-Info {
@@ -38,7 +38,7 @@ if (-not (Test-Path $envFile)) {
 
 Write-Host ""
 Write-Host "======================================"
-Write-Host "  PolyRAG Language Configuration"
+Write-Host "  FullyRAG Language Configuration"
 Write-Host "======================================"
 Write-Host ""
 
@@ -123,7 +123,7 @@ Write-Host ""
 Print-Success "Language configuration complete!"
 Write-Host ""
 Print-Info "Next steps:"
-Write-Host "  1. Restart your PolyRAG application"
+Write-Host "  1. Restart your FullyRAG application"
 Write-Host "  2. The UI will now display in $displayName"
 Write-Host "  3. Users can still change language using the sidebar selector"
 Write-Host ""

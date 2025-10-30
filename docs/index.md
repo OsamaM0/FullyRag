@@ -1,6 +1,6 @@
-# PolyRAG Documentation
+# FullyRAG Documentation
 
-Welcome to the PolyRAG docs. This is the single place for setup, usage, and architecture.
+Welcome to the FullyRAG docs. This is the single place for setup, usage, and architecture.
 
 - Overview
 - Quick start
@@ -16,7 +16,7 @@ Welcome to the PolyRAG docs. This is the single place for setup, usage, and arch
 
 ## Overview
 
-PolyRAG is a modular, agentic RAG framework optimized for small/slow LLMs with small context windows. Agents and tools pipe outputs directly, auto-correct imperfect inputs, and minimize the main agent context load.
+FullyRAG is a modular, agentic RAG framework optimized for small/slow LLMs with small context windows. Agents and tools pipe outputs directly, auto-correct imperfect inputs, and minimize the main agent context load.
 
 Key capabilities:
 - Agentic RAG with modular agents/tools (SQL, RAG, PDF annotations, plotting)
